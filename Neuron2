@@ -1,0 +1,41 @@
+import numpy as np
+
+x1 = 2
+x2 = 3
+
+w1 = 0.5
+w2 = 0.2
+
+b = 0.1
+
+class Neuron:
+    def __init__(self,weight,bias):
+        self.weight=weight
+        self.bias=bias
+
+    def forward(self,inputs):
+        self.inputs=inputs
+        self.output=np.dot(inputs,self.weight)+self.bias
+    def loss(self,target):
+        self.target=target
+        self.l=(1/2)*(self.output-self.target)**2
+    def backward(self):
+        self.doutput=self.output-self.target
+        self.dweight1=self.doutput*self.inputs[0]
+        self.dweight2=self.doutput*self.inputs[1]
+        self.dbias=self.doutput
+
+    def update(self, learning_rate):
+        self.dweights = np.array([self.dweight1, self.dweight2])
+        self.weight=self.weight-learning_rate*self.dweights
+        self.bias=self.bias-learning_rate*self.dbias
+
+Neuron1=Neuron(np.array([0.5,0.2]),0.1)
+Neuron1.forward([2,3])
+for i in range(100):
+    Neuron1.forward([2,3])
+    Neuron1.loss(2)
+    Neuron1.backward()
+    Neuron1.update(0.1)
+
+    print(Neuron1.output, Neuron1.l)
